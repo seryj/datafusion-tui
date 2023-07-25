@@ -7,28 +7,28 @@ edition = "2021"
 
 [dependencies]
 
-arrow = "9"
-aws-sdk-s3 = "0.6.0"
-aws-types = "0.6.0"
-# ballista = {version = "0.6", optional=true}
+arrow = "40"
+# aws-sdk-s3 = "0.28"
+# aws-types = "0.55"
+ballista = {version = "0.11", optional=true}
 clap = {version = "3", features = ["derive", "cargo"]}
-crossterm = { version = "0.23", features = [ "serde" ] }
-datafusion = "7"
-datafusion-objectstore-s3 = { version = "0", optional=true }
-datafusion-bigtable = { version = "0", optional=true }
-dirs = "4.0"
+crossterm = { version = "0.26", features = [ "serde" ] }
+datafusion = "26"
+# datafusion-objectstore-s3 = { version = "0", optional=true }
+# datafusion-bigtable = { version = "0", optional=true }
+dirs = "5.0"
 futures = "0.3"
 http = "0.2.6"
 log = "0.4"
 mimalloc = { version = "*", default-features = false }
 serde = "1.0.136"
 serde_json = "1.0.79"
-tui = { version = "0.17", default-features = false, features = ['crossterm', 'serde'] }
-tui-logger = "0.7"
+ratatui = { version = "0.21", default-features = false, features = ['crossterm', 'serde'] }
+tui-logger = {version="0.9", default-features = false, features = ["ratatui-support"]}
 tokio = { version = "1", features = ["full"] }
 unicode-width = "0.1.9"
 
 [features]
-s3 = ["datafusion-objectstore-s3"]
-bigtable = ["datafusion-bigtable"]
+# s3 = ["datafusion-objectstore-s3"]
+# bigtable = ["datafusion-bigtable"]
 # ballista = ["ballista"]

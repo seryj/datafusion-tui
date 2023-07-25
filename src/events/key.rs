@@ -39,7 +39,7 @@
 //
 // Link: https://github.com/Rigellute/spotify-tui/blob/master/src/event/key.rs
 
-use crossterm::event;
+use crossterm::event::{self, KeyEventKind, KeyEventState};
 use std::fmt;
 
 /// Represents an key.
@@ -225,10 +225,14 @@ impl From<event::KeyEvent> for Key {
             event::KeyEvent {
                 code: event::KeyCode::Char(c),
                 modifiers: event::KeyModifiers::ALT,
+                kind: KeyEventKind::Press,
+                state: KeyEventState::NONE,
             } => Key::Alt(c),
             event::KeyEvent {
                 code: event::KeyCode::Char(c),
                 modifiers: event::KeyModifiers::CONTROL,
+                kind: KeyEventKind::Press,
+                state: KeyEventState::NONE,
             } => Key::Ctrl(c),
 
             event::KeyEvent {

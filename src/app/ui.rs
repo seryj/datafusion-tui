@@ -14,12 +14,12 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-use tui::{
+use ratatui::{
     backend::Backend,
     layout::{Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
-    text::{Span, Spans, Text},
-    widgets::{Block, Borders, List, ListItem, Paragraph, Tabs},
+    text::{Span, Text, Line},
+    widgets::{Borders, List, ListItem, Paragraph, Tabs, Block},
     Frame,
 };
 use tui_logger::TuiLoggerWidget;
@@ -179,7 +179,7 @@ fn draw_sql_editor_help<'a>(app: &mut App) -> Paragraph<'a> {
             Style::default(),
         ),
     };
-    let mut text = Text::from(Spans::from(msg));
+    let mut text = Text::from(Line::from(msg));
     text.patch_style(style);
     Paragraph::new(text)
 }
@@ -195,7 +195,7 @@ fn draw_default_help<'a>() -> Paragraph<'a> {
         ],
         Style::default().add_modifier(Modifier::RAPID_BLINK),
     );
-    let mut text = Text::from(Spans::from(msg));
+    let mut text = Text::from(Line::from(msg));
     text.patch_style(style);
     Paragraph::new(text)
 }
@@ -261,7 +261,7 @@ fn draw_tabs<'a>(app: &mut App) -> Tabs<'a> {
     let titles = TabItem::all_values()
         .iter()
         .map(|tab| tab.title_with_key())
-        .map(|t| Spans::from(vec![Span::styled(t, Style::default())]))
+        .map(|t| Line::from(vec![Span::styled(t, Style::default())]))
         .collect();
 
     Tabs::new(titles)
@@ -279,12 +279,12 @@ fn draw_query_history<'a>(app: &mut App) -> List<'a> {
         .enumerate()
         .map(|(i, m)| {
             let content = vec![
-                Spans::from(Span::raw(format!(
+                Line::from(Span::raw(format!(
                     "Query {} [ {} rows took {:.3} seconds ]",
                     i, m.rows, m.query_duration
                 ))),
-                Spans::from(Span::raw(m.query.clone())),
-                Spans::from(Span::raw(String::new())),
+                Line::from(Span::raw(m.query.clone())),
+                Line::from(Span::raw(String::new())),
             ];
             ListItem::new(content)
         })
@@ -330,7 +330,7 @@ fn draw_execution_config(app: &mut App) -> List {
     let config: Vec<ListItem> = exec_config
         .iter()
         .map(|i| {
-            let content = vec![Spans::from(Span::raw(i.to_string()))];
+            let content = vec![Line::from(Span::raw(i.to_string()))];
             ListItem::new(content)
         })
         .collect();
@@ -347,7 +347,7 @@ fn draw_physical_optimizers(app: &mut App) -> List {
     let opts: Vec<ListItem> = physical_optimizers
         .iter()
         .map(|i| {
-            let content = vec![Spans::from(Span::raw(i.to_string()))];
+            let content = vec![Line::from(Span::raw(i.to_string()))];
             ListItem::new(content)
         })
         .collect();

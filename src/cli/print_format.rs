@@ -72,13 +72,14 @@ fn print_batches_with_sep(batches: &[RecordBatch], delimiter: u8) -> Result<Stri
 impl PrintFormat {
     /// print the batches to stdout using the specified format
     pub fn print_batches(&self, batches: &[RecordBatch]) -> Result<()> {
+        let ref_batches = batches.iter().map(|v| v).collect::<Vec<&RecordBatch>>();
         match self {
             Self::Csv => println!("{}", print_batches_with_sep(batches, b',')?),
             Self::Tsv => println!("{}", print_batches_with_sep(batches, b'\t')?),
             Self::Table => pretty::print_batches(batches)?,
-            Self::Json => println!("{}", batches_to_json!(ArrayWriter, batches)),
+            Self::Json => println!("{}", batches_to_json!(ArrayWriter, ref_batches.as_slice())),
             Self::NdJson => {
-                println!("{}", batches_to_json!(LineDelimitedWriter, batches))
+                println!("{}", batches_to_json!(LineDelimitedWriter, ref_batches.as_slice()))
             }
         }
         Ok(())
@@ -145,13 +146,14 @@ mod tests {
         .unwrap();
 
         let batches = vec![batch];
-        let r = batches_to_json!(ArrayWriter, &batches);
+        let ref_batches = batches.iter().map(|v| v).collect::<Vec<&RecordBatch>>();
+        let r = batches_to_json!(ArrayWriter, &ref_batches.as_slice());
         assert_eq!(
             "[{\"a\":1,\"b\":4,\"c\":7},{\"a\":2,\"b\":5,\"c\":8},{\"a\":3,\"b\":6,\"c\":9}]",
             r
         );
 
-        let r = batches_to_json!(LineDelimitedWriter, &batches);
+        let r = batches_to_json!(LineDelimitedWriter, &ref_batches.as_slice());
         assert_eq!(
             "{\"a\":1,\"b\":4,\"c\":7}\n{\"a\":2,\"b\":5,\"c\":8}\n{\"a\":3,\"b\":6,\"c\":9}\n",
             r

@@ -24,7 +24,6 @@ use arrow::util::pretty::pretty_format_batches;
 use datafusion::error::DataFusionError;
 use datafusion::prelude::DataFrame;
 use log::{debug, error};
-use std::sync::Arc;
 use std::time::Instant;
 
 pub enum NormalModeAction {
@@ -157,7 +156,7 @@ async fn handle_successful_query(
     app: &mut App,
     start: Instant,
     sql: String,
-    df: Arc<dyn DataFrame>,
+    df: DataFrame,
 ) -> Result<()> {
     debug!("Successfully executed query");
     let batches = df.collect().await.map_err(DftError::DataFusionError)?;
